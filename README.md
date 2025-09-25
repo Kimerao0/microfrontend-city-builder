@@ -8,9 +8,10 @@ L’obiettivo è mostrare come più applicazioni indipendenti possano collaborar
 ## 🎯 Obiettivo del workshop
 
 Ogni team (Red, Blue, Purple, Green…) costruirà un proprio microfrontend che rappresenta un **blocco della città**.  
-Questi blocchi verranno esposti e consumati da **city-container**, che fungerà da host/orchestratore.  
+Questi blocchi verranno esposti e consumati da **city-container**, che fungerà da host/orchestratore.
 
 I partecipanti otterranno **punti** creando precise combinazioni di blocchi, imparando così a:
+
 - Creare un microfrontend in React
 - Esportarlo con Module Federation
 - Integrarlo in un container host
@@ -31,9 +32,9 @@ microfrontend-city-builder/
 
 ## ⚙️ Tecnologie utilizzate
 
-- [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)  
-- [Vite](https://vitejs.dev/)  
-- [Module Federation](https://webpack.js.org/concepts/module-federation/)  
+- [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+- [Module Federation](https://webpack.js.org/concepts/module-federation/)
 
 ---
 
@@ -54,3 +55,7 @@ yarn dev
 cd ../team-red
 yarn install
 yarn dev
+
+
+# come configurare un servizio
+```
