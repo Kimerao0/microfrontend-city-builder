@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "workspaces": [
+    "container",
+    "team-blue",
+    "team-red",
+    "team-green",
+    "team-purple"
+  ],
+  "scripts": {
+    "dev": "concurrently -n container,team-blue,team-red,team-green,team-purple -c yellow,blue,red,green,purple \"yarn workspace container dev\" \"yarn workspace team-blue dev\" \"yarn workspace team-red dev\" \"yarn workspace team-green dev\" \"yarn workspace team-purple dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
