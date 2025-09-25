@@ -58,4 +58,32 @@ yarn dev
 
 
 # come configurare un servizio
+1- Installa il plugin Module Federation - yarn add -D @module-federation/vite
+2- Configura il file vite.config.ts:
+
+`import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import federation from '@module-federation/vite'
+
+export default defineConfig({
+  server: { port: 5174, cors: true },
+  plugins: [
+    react(),
+    federation({
+      name: 'team_****',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './Block': './src/index.tsx', // il componente che esponi
+      },
+      shared: {
+        react: { singleton: true, requiredVersion: '^18.0.0' },
+        'react-dom': { singleton: true, requiredVersion: '^18.0.0' },
+      },
+    }),
+  ],
+  build: {
+    target: 'esnext',
+    minify: false,
+  },
+})`
 ```
