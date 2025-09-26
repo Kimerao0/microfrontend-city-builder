@@ -7,14 +7,7 @@ export default defineConfig({
     react(),
     federation({
       name: 'container',
-      remotes: {
-        team_blue: {
-          type: 'module',
-          name: 'team_blue',
-          entry: 'http://localhost:5174/remoteEntry.js',
-          shareScope: 'default',
-        },
-      },
+      remotes: {},
       shared: {
         react: { singleton: true },
         'react-dom': { singleton: true },

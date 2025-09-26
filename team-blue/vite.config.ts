@@ -8,14 +8,7 @@ export default defineConfig({
     federation({
       name: 'team_blue', // nome del remote
       filename: 'remoteEntry.js', // manifest del remote
-      exposes: {
-        './MainExport': './src/ExportContent.tsx',
-        './registry': './src/registry.tsx',
-      },
-      shared: {
-        react: { singleton: true },
-        'react-dom': { singleton: true },
-      },
+      exposes: {},
     }),
   ],
   server: {
