@@ -1,7 +1,8 @@
 import React from 'react';
+import type { MicroFrontendProps } from '../../types';
 
-const ExportContent: React.FC = () => {
-  return <div>Team Blue export</div>;
+const ExportContent: React.FC<MicroFrontendProps> = () => {
+  return <div>Team Blue export Online</div>;
 };
 
 export default ExportContent;

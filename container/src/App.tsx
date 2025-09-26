@@ -1,14 +1,25 @@
 import React, { Suspense } from 'react';
+import registry from 'team_blue/registry';
 
-const TeamBlueWidget = React.lazy(() => import('team_blue/MainExport'));
+function LazyFrom(loader: () => Promise<{ default: React.ComponentType<any> }>) {
+  return React.lazy(loader);
+}
 
-export default function App() {
+export const App = () => {
   return (
     <main>
       <h2>Container Host</h2>
-      <Suspense fallback={<div>Caricamento widget Team Blue…</div>}>
-        <TeamBlueWidget />
-      </Suspense>
+      {registry.map(({ id, label, load }) => {
+        const Cmp = LazyFrom(load);
+        return (
+          <section key={id} style={{ marginBottom: 16 }}>
+            <h3>{label}</h3>
+            <Suspense fallback={<div>Caricamento {label}…</div>}>
+              <Cmp />
+            </Suspense>
+          </section>
+        );
+      })}
     </main>
   );
-}
+};

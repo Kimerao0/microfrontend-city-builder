@@ -10,6 +10,7 @@ export default defineConfig({
       filename: 'remoteEntry.js', // manifest del remote
       exposes: {
         './MainExport': './src/ExportContent.tsx',
+        './registry': './src/registry.tsx',
       },
       shared: {
         react: { singleton: true },
