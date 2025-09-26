@@ -1,11 +1,14 @@
-import "./App.css";
+import React, { Suspense } from 'react';
 
-function App() {
+const TeamBlueWidget = React.lazy(() => import('team_blue/MainExport'));
+
+export default function App() {
   return (
-    <>
-      <p>container</p>
-    </>
+    <main>
+      <h2>Container Host</h2>
+      <Suspense fallback={<div>Caricamento widget Team Blue…</div>}>
+        <TeamBlueWidget />
+      </Suspense>
+    </main>
   );
 }
-
-export default App;
