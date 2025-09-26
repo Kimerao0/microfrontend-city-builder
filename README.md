@@ -1,13 +1,13 @@
 # 🏙️ Microfrontend City Builder
 
-**Microfrontend City Builder** è un progetto creato da **Alessandro Ceruti** per un workshop interno dedicato al tema dei **Microfrontend**.  
+**Microfrontend City Builder** è un progetto creato per un workshop interno dedicato al tema dei **Microfrontend**.  
 L’obiettivo è mostrare come più applicazioni indipendenti possano collaborare per costruire un unico sistema, utilizzando **React**, **TypeScript**, **Vite** e **Module Federation**.
 
 ---
 
 ## 🎯 Obiettivo del workshop
 
-Ogni team (Red, Blue, Purple, Green) costruirà un proprio microfrontend che rappresenta un **blocco della città**.  
+Ogni team (Red, Blue, Purple, Green) costruirà un proprio microfrontend che rappresenta uno o più **blocchi della città**.  
 Questi blocchi verranno esposti e consumati da **container**, che fungerà da host/orchestratore.
 
 I partecipanti otterranno **punti** creando precise combinazioni di blocchi, imparando così a:
@@ -22,11 +22,11 @@ I partecipanti otterranno **punti** creando precise combinazioni di blocchi, imp
 ## 🗂️ Struttura del repository
 
 microfrontend-city-builder/
-│── city-container/ # Host app che orchestra i microfrontend
+│── container/ # Host app che orchestra i microfrontend
 │── team-red/ # Microfrontend del Team Red
-│── (team-blue/) # In arrivo
-│── (team-green/) # In arrivo
-│── (team-purple/) # In arrivo
+│── team-blue/ # Microfrontend del Team Blue
+│── team-green/ # Microfrontend del Team Green
+│── team-purple/ # Microfrontend del Team Purple
 
 ---
 
@@ -46,8 +46,8 @@ Clona il repository:
 git clone https://github.com/<tuo-username>/microfrontend-city-builder.git
 cd microfrontend-city-builder
 
-# dentro city-container
-cd city-container
+# dentro container
+cd container
 yarn install
 yarn dev
 
@@ -56,99 +56,114 @@ cd ../team-red
 yarn install
 yarn dev
 
+## 🔧 Guida alla configurazione:
 
-# come configurare un servizio
-1- Installa il plugin Module Federation - yarn add -D @module-federation/vite nel tuo microfrontend
-2- Crea un componente React nella folder src e chiamalo ExportContent.tsx
-3- Configura il file vite.config.ts del tuo microfrontend:
+1. Installa il plugin Module Federation
+Nel tuo microfrontend (es. team-red):
+yarn add -D @module-federation/vite
 
-`export default defineConfig({
+2. Crea un componente da esportare
+Ad esempio in src/ExportContent.tsx.
+
+3. Configura vite.config.ts del microfrontend
+export default defineConfig({
   plugins: [
     react(),
     federation({
-      name: 'team_****', // nome del microfrontend
-      filename: 'remoteEntry.js', // manifest del remote standard
+      name: "team_****", // nome del microfrontend
+      filename: "remoteEntry.js", // manifest del remote standard
       exposes: {
-        './Team****Main': './src/ExportContent.tsx', // key: nome del modulo esposto da riportare come remote nel container assieme al name, value: percorso del componente che si vuole esportare
+        "./Team****Main": "./src/ExportContent.tsx",
+        // key: nome del modulo esposto da riportare come remote nel container
+        // value: percorso del componente da esportare
       },
-     shared: {
-      react: { singleton: true }, // condiviso per evitare più copie di React; singleton = una sola istanza in tutta l’app
-      "react-dom": { singleton: true }, // stessa logica di React, garantisce coerenza ed evita errori di hook
-    },
+      shared: {
+        react: { singleton: true },      // condiviso per evitare più copie di React
+        "react-dom": { singleton: true } // stessa logica di React, evita errori di hook
+      },
     }),
   ],
   server: {
-  port: 5174, // porta su cui gira il dev server di questo microfrontend
-  origin: 'http://localhost:5174', // URL base usato per risolvere i chunk in fase di sviluppo
-},
-base: 'http://localhost:5174/', // base URL per caricare asset/chunk (utile anche in build)
-build: {
-  target: 'chrome89', // target di build: definisce il livello di compatibilità JS
-},
-});`
+    port: 5174,                       // porta del dev server del microfrontend
+    origin: "http://localhost:5174",  // URL base per i chunk in sviluppo
+  },
+  base: "http://localhost:5174/",      // base URL anche in fase di build
+  build: {
+    target: "chrome89",                // livello di compatibilità JS
+  },
+});
 
-4- Dichiarare il module remote all'interno del file remotes.d.ts dell'host
-// TypeScript non conosce di default l’esistenza di "team_****/Team****Main", perché non è un modulo fisico presente nel node_modules o nel filesystem.
-// Per evitare errori di compilazione (Cannot find module 'team_****/Team****Main'), si dichiara il modulo manualmente in un file .d.ts, ad esempio:
+
+4. Dichiarare il module remote nell’host
+
+TypeScript non conosce i moduli federati (non esistono in node_modules o nel filesystem).
+Per evitare errori (Cannot find module ...), aggiungi un file di dichiarazione:
+
 // container/src/remotes.d.ts
-// declare module "team_****/Team****Main";
+declare module "team_****/Team****Main";
 
-5- Configurazione del file vite dell\'host:
-container/vite.config.ts
-  import { defineConfig } from "vite";
-  import react from "@vitejs/plugin-react";
-  import { federation } from "@module-federation/vite";
+5. Configura vite.config.ts dell’host
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { federation } from "@module-federation/vite";
 
-  export default defineConfig({
-    plugins: [
-      react(),
-      federation({
-        name: "container",
-        remotes: {
-          team_****: {
-            type: "module",
-            name: "team_****",
-            entry: "http://localhost:5174/remoteEntry.js",
-            shareScope: "default",
-          },
+export default defineConfig({
+  plugins: [
+    react(),
+    federation({
+      name: "container",
+      remotes: {
+        team_****: {
+          type: "module",
+          name: "team_****",
+          entry: "http://localhost:5174/remoteEntry.js",
+          shareScope: "default",
         },
-        shared: {
-          react: { singleton: true },
-          "react-dom": { singleton: true },
-        },
-      }),
-    ],
-    server: {
-      port: 5173,
-      origin: "http://localhost:5173",
-    },
-    base: "http://localhost:5173/",
-    build: {
-      target: "chrome89",
-    },
-  });
+      },
+      shared: {
+        react: { singleton: true },
+        "react-dom": { singleton: true },
+      },
+    }),
+  ],
+  server: {
+    port: 5173,
+    origin: "http://localhost:5173",
+  },
+  base: "http://localhost:5173/",
+  build: {
+    target: "chrome89",
+  },
+});
 
-6- Usa il componente remoto nell’host
-  import React, { Suspense } from "react";
+6. Usa il componente remoto nell’host
 
-  // import del modulo esposto dal remote tramite Module Federation
-  // React.lazy permette di caricare il componente in modo dinamico/asyncrono
-  const TeamBlueWidget = React.lazy(() => import("team_blue/TeamBlueWidget"));
+import React, { Suspense } from "react";
 
-  export default function App() {
-    return (
-      <main style={{ fontFamily: "system-ui", padding: 24 }}>
-        <h2>Container Host</h2>
+// Import del modulo esposto dal remote tramite Module Federation
+// React.lazy carica il componente in modo asincrono
+const TeamBlueWidget = React.lazy(() => import("team_blue/TeamBlueWidget"));
 
-        {/* Suspense mostra un fallback finché il componente remoto non è stato caricato */}
-        <Suspense fallback={<div>Caricamento widget Team Blue…</div>}>
-          {/* qui viene renderizzato il componente federato proveniente dal remote */}
-          <TeamBlueWidget />
-        </Suspense>
-      </main>
-    );
-  }
+export default function App() {
+  return (
+    <main style={{ fontFamily: "system-ui", padding: 24 }}>
+      <h2>Container Host</h2>
 
+      {/* Suspense mostra un fallback finché il componente remoto non è pronto */}
+      <Suspense fallback={<div>Caricamento widget Team Blue…</div>}>
+        {/* Rendering del componente federato proveniente dal remote */}
+        <TeamBlueWidget />
+      </Suspense>
+    </main>
+  );
+}
 
+Checklist veloce:
 
+Installato @module-federation/vite
+Creato ExportContent.tsx nel microfrontend
+Configurato vite.config.ts del microfrontend con exposes
+Dichiarato il modulo remoto in remotes.d.ts nell’host
+Configurato vite.config.ts dell’host con remotes
+Importato il componente remoto con React.lazy + Suspense
 ```
