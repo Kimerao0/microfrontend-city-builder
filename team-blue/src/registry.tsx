@@ -1,6 +1,5 @@
 import Test1 from './components/Test1';
-import type { BoardTile } from './types/index';
-
+import type { BoardTile } from '../../shared/types';
 
 export const Registry: BoardTile[] = [
   {

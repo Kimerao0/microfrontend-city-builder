@@ -22,6 +22,6 @@ export default defineConfig({
     }),
   ],
   server: { port: 5174, cors: true },
-  base: '/',           // tienilo semplice in dev
+  base: '/',          
   build: { target: 'esnext' },
 });

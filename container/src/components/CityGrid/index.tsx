@@ -4,7 +4,7 @@ import { createDefaultTiles, } from './createDefaultTiles';
 import { DefaultTile } from './defaultTile';
 import safeJsonParse from '../../utils/safeDecode';
 import { useCity } from '../../context/CityContext';
-import type { BoardTile } from '../../types';
+import type { BoardTile } from '../../../../shared/types';
 export interface CityGridProps { 
   tiles: BoardTile[];
 }
@@ -12,8 +12,8 @@ export interface CityGridProps {
 export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
   const { defaultTilesTypes, setDefaultTilesTypes } = useCity();
 
-  const rows = 12;
-  const cols = 12;
+  const rows = 14;
+  const cols = 14;
   const items = React.useMemo(() => Array.from({ length: rows * cols }, (_, i) => i), [rows, cols]);
 
   React.useEffect(() => {

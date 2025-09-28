@@ -5,7 +5,7 @@ import { ContractsList } from './components/ContractsList';
 import { CityProvider } from './context/CityContext';
 import { ThemeProvider, CssBaseline, Typography } from '@mui/material';
 import theme from './theme';
-import type { BoardTile } from './types';
+import type { BoardTile } from '../../shared/types';
 
 export const App = () => {
   const [tiles, setTiles] = useState<BoardTile[]>([]);

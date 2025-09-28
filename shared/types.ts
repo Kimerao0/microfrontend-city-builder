@@ -1,4 +1,4 @@
-type Teams = 'blue';
+type Teams = "red" | "blue" | "green" | "purple";
 
 export interface BoardTile {
   id: number;
