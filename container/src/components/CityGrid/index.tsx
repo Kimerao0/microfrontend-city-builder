@@ -1,12 +1,13 @@
-import { Button } from '@mui/material';
+import { Button, styled } from '@mui/material';
 import * as React from 'react';
-import { createDefaultTiles } from './createDefaultTiles';
+import { createDefaultTiles, } from './createDefaultTiles';
 import { DefaultTile } from './defaultTile';
 import safeJsonParse from '../../utils/safeDecode';
 import { useCity } from '../../context/CityContext';
-
-export type TileProps = { row: number; col: number };
-export type CityGridProps = { tiles: React.ComponentType<TileProps>[] };
+import type { BoardTile } from '../../types';
+export interface CityGridProps { 
+  tiles: BoardTile[];
+}
 
 export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
   const { defaultTilesTypes, setDefaultTilesTypes } = useCity();
@@ -15,9 +16,8 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
   const cols = 12;
   const items = React.useMemo(() => Array.from({ length: rows * cols }, (_, i) => i), [rows, cols]);
 
-
   React.useEffect(() => {
-    if (typeof window === 'undefined') return; // safety per SSR
+    if (typeof window === 'undefined') return;
     const stored = localStorage.getItem('defaultTiles');
     const parsed = safeJsonParse<string[] | null>(stored);
     if (parsed) setDefaultTilesTypes(parsed);
@@ -36,44 +36,44 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
 
   return (
     <>
-      <div
-        role="table"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${cols}, 1fr)`,
-          gridTemplateRows: `repeat(${rows}, 1fr)`,
-          gap: 4,
-          width: '100%',
-          height: '100%',
-        }}
-      >
+      <TableWrapper role="table" rows={rows} cols={cols}>
         {items.map((index) => {
           const row = Math.floor(index / cols);
           const col = index % cols;
-          const cellIndex = row * 10 + col + 1; // (nota: qui usi "10" fisso)
-
-          const Tile = tiles[index];
-
+          const cellIndex = row * cols + col + 1; 
+          const tileAtIndex = tiles.find(t => t.index === cellIndex);
           return (
             <div role="cell" key={index} id={`${cellIndex}`}>
-              {Tile ? (
-                <Tile row={row} col={col} />
+              {tileAtIndex ? (
+               tileAtIndex.tile
               ) : (
-                <DefaultTile value={defaultTilesTypes ? defaultTilesTypes[index] : null} cellIndex={cellIndex} />
+                <DefaultTile
+                  value={defaultTilesTypes ? defaultTilesTypes[index] : null}
+                  cellIndex={cellIndex}
+                />
               )}
             </div>
           );
         })}
-      </div>
+      </TableWrapper>
 
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 16, gap: 8 }}>
         <Button variant="contained" color="primary" onClick={handleColorMap}>
           Color map
         </Button>
-        <Button variant="contained" color="primary" onClick={handleMapReset} style={{ marginLeft: 8 }}>
+        <Button variant="outlined" color="primary" onClick={handleMapReset}>
           Reset map
         </Button>
       </div>
     </>
   );
 };
+
+const TableWrapper = styled('div')<{ cols: number; rows: number }>(({ rows, cols }) => ({
+  display: 'grid',
+  gridTemplateColumns: `repeat(${cols}, 1fr)`,
+  gridTemplateRows: `repeat(${rows}, 1fr)`,
+  gap: 4,
+  width: '100%',
+  height: '100%',
+}));
