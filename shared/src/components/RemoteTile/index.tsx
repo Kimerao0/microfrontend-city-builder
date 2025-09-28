@@ -14,6 +14,8 @@ interface RemoteTileProps {
   cellIndex: number;
   cellType: TileType;
   team: Teams;
+  hasPowerStation?: boolean;
+  hasMetroStation?: boolean;
 }
 
 export const RemoteTile: React.FC<RemoteTileProps> = ({

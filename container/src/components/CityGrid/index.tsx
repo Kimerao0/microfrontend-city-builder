@@ -1,19 +1,20 @@
+import React from 'react';
 import { Button, styled } from '@mui/material';
-import * as React from 'react';
 import { createDefaultTiles } from './createDefaultTiles';
-import { DefaultTile } from './defaultTile';
+import { DefaultTile, findIndexesOfCentrale } from './defaultTile';
 import safeJsonParse from '../../utils/safeDecode';
 import { useCity } from '../../context/CityContext';
-import type { BoardTile } from '../../../../shared/src/types';
+import { EVENT_STATION_POS, type BoardTile, type StationPosition } from '../../../../shared/src/types';
 import { colors } from '../../../../shared/src/values';
 export interface CityGridProps {
   tiles: BoardTile[];
 }
 
 export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
+  const [powerStationPosition, setPowerStationPosition] = React.useState<number[]>([]);
   const { defaultTilesTypes, setDefaultTilesTypes } = useCity();
 
-  const rows = 12;
+  const rows = 10;
   const cols = rows;
   const items = React.useMemo(() => Array.from({ length: rows * cols }, (_, i) => i), [rows, cols]);
 
@@ -35,6 +36,18 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
     localStorage.setItem('defaultTiles', JSON.stringify(null));
   };
 
+  React.useEffect(() => {
+    if (!defaultTilesTypes) return;
+    const powerList = findIndexesOfCentrale(defaultTilesTypes);
+    setPowerStationPosition(powerList);
+
+    powerList.forEach((position) =>
+      notifyStationPosition({
+        position,
+      }),
+    );
+  }, [defaultTilesTypes]);
+
   return (
     <>
       <TableWrapper role="table" rows={rows} cols={cols}>
@@ -45,8 +58,6 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
           const tileAtIndex = tiles.find((t) => t.id === cellIndex);
           let isRightColor = false;
           if (tileAtIndex && defaultTilesTypes) {
-            console.log('tile def col', defaultTilesTypes[cellIndex - 1]);
-            console.log('team col', tileAtIndex.team, colors[tileAtIndex.team]);
             isRightColor = colors[tileAtIndex.team] === defaultTilesTypes[cellIndex - 1];
           }
           return (
@@ -54,7 +65,12 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
               {tileAtIndex && isRightColor ? (
                 tileAtIndex.tile
               ) : (
-                <DefaultTile value={defaultTilesTypes ? defaultTilesTypes[index] : null} cellIndex={cellIndex} />
+                <DefaultTile
+                  value={defaultTilesTypes ? defaultTilesTypes[index] : null}
+                  cellIndex={cellIndex}
+                  allItems={defaultTilesTypes || []}
+                  powerList={powerStationPosition}
+                />
               )}
             </div>
           );
@@ -81,3 +97,7 @@ const TableWrapper = styled('div')<{ cols: number; rows: number }>(({ rows, cols
   width: '100%',
   height: '100%',
 }));
+
+export function notifyStationPosition(p: StationPosition) {
+  window.dispatchEvent(new CustomEvent<StationPosition>(EVENT_STATION_POS, { detail: p }));
+}

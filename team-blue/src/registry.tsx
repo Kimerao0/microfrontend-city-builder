@@ -9,13 +9,6 @@ const generateBlueRegistryTile = ({ index, type }: BlueRegistry): BoardTile => (
   tile: <BasicTile index={index} team="blue" type={type} />,
 });
 
-export const Registry: BoardTile[] = [
-  generateBlueRegistryTile({ index: 18, type: 'curva-NE' }),
-  {
-    id: 7,
-    team: 'purple',
-    tile: <BasicTile index={7} team="purple" type="giardino" />,
-  },
-];
+export const Registry: BoardTile[] = [generateBlueRegistryTile({ index: 18, type: 'curva-NE' })];
 
 export default Registry;

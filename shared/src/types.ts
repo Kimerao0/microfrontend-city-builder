@@ -25,3 +25,9 @@ export const tileTypesList = [
 ] as const;
 
 export type TileType = (typeof tileTypesList)[number];
+
+// contracts/powerStationPosition.ts
+export type StationPosition = {
+  position: number;
+};
+export const EVENT_STATION_POS = "mf:power:station:position";

@@ -5,7 +5,7 @@ export const TileNumber = styled("span")<{ val: number; bgcolor?: string }>(({
   bgcolor,
 }) => {
   const smallFs = val > 9 ? 11 : 13;
-  const size = 18;
+  const size = 20;
   return {
     borderRadius: "50%",
     backgroundColor: bgcolor || "#00000075",
