@@ -44,7 +44,7 @@ export const registry: WidgetMeta[] = [
   {
     id: "team-****:widget",
     label: "Team ****",
-    load: () => import("./components/Team****Wirdget"),
+    load: () => import("./components/Team****Widget"),
   },
   {
     id: "team-****:another",

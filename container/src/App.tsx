@@ -1,15 +1,26 @@
+import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { CityGrid} from './components/CityGrid';
+import { CityGrid } from './components/CityGrid';
 import { ContractsList } from './components/ContractsList';
 import { CityProvider } from './context/CityContext';
 import { ThemeProvider, CssBaseline, Typography } from '@mui/material';
 import theme from './theme';
 import type { BoardTile } from './types';
 
-
-
 export const App = () => {
-  const tiles:BoardTile[] = [];
+  const [tiles, setTiles] = useState<BoardTile[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      // Named export o default, a seconda di come esporti in team-blue
+      const mod = await import('team_blue/registry');
+      // Se in team-blue hai "export const Registry = [...]; export default Registry;"
+      const remoteTiles: BoardTile[] = (mod.default ?? mod.Registry) as BoardTile[];
+      setTiles(remoteTiles);
+    })();
+  }, []);
+
+  console.log(tiles)
 
   return (
     <ThemeProvider theme={theme}>

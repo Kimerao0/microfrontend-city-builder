@@ -41,7 +41,7 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
           const row = Math.floor(index / cols);
           const col = index % cols;
           const cellIndex = row * cols + col + 1; 
-          const tileAtIndex = tiles.find(t => t.index === cellIndex);
+          const tileAtIndex = tiles.find(t => t.id === cellIndex);
           return (
             <div role="cell" key={index} id={`${cellIndex}`}>
               {tileAtIndex ? (

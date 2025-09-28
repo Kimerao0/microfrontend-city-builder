@@ -1,22 +1,27 @@
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { federation } from '@module-federation/vite';
+import {federation} from '@module-federation/vite';
 
 export default defineConfig({
   plugins: [
     react(),
     federation({
-      name: 'team_blue', // nome del remote
-      filename: 'remoteEntry.js', // manifest del remote
-      exposes: {},
+      name: 'team_blue',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './registry': './src/registry.tsx',
+      },
+      shared: {
+        react: { singleton: true, requiredVersion: '^19' },
+        'react-dom': { singleton: true, requiredVersion: '^19' },
+        '@mui/material': { singleton: true },
+        '@emotion/react': { singleton: true },
+        '@emotion/styled': { singleton: true },
+      },
     }),
   ],
-  server: {
-    port: 5174,
-    origin: 'http://localhost:5174',
-  },
-  base: 'http://localhost:5174/',
-  build: {
-    target: 'chrome89',
-  },
+  server: { port: 5174, cors: true },
+  base: '/',           // tienilo semplice in dev
+  build: { target: 'esnext' },
 });

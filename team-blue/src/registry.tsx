@@ -1,25 +1,13 @@
-import type { ComponentType } from 'react';
+import Test1 from './components/Test1';
+import type { BoardTile } from './types/index';
 
-export type WidgetLoader = () => Promise<{ default: ComponentType<any> }>;
 
-export type WidgetMeta = {
-  id: string;
-  label: string;
-  load: WidgetLoader; // dynamic import del widget
-};
-
-// Ogni voce punta a un modulo realmente separato così Vite può fare code-splitting.
-export const registry: WidgetMeta[] = [
+export const Registry: BoardTile[] = [
   {
-    id: 'team-blue:widget',
-    label: 'Team Blue',
-    load: () => import('./components/Test1'),
-  },
-  {
-    id: 'team-blue:another',
-    label: 'Another',
-    load: () => import('./components/Test2'),
+    id: 55,
+    team: 'blue',
+    tile: <Test1 />,
   },
 ];
 
-export default registry;
+export default Registry;

@@ -1,7 +1,9 @@
+import type { ComponentType } from 'react';
+
 type Teams = 'red' | 'blue' | 'green' | 'purple';
 
 export interface BoardTile {
-  index: number;
+  id: number;
   team: Teams;
   tile: React.JSX.Element;
 }
