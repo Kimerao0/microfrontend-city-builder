@@ -1,4 +1,5 @@
 import { shuffle } from '../../utils/arrayMethods';
+import { colors } from '../../../../shared/src/values';
 
 export const buildingsTiles = ['stadio', 'ospedale', 'municipio', 'statua', 'stazione'] as const;
 export type ExtraTile = (typeof buildingsTiles)[number];
@@ -15,10 +16,10 @@ export const isPowerPlantTile = (value: string): value is PowerPlantTile => {
 export const AllExtraTiles = [...buildingsTiles, powerPlantTile];
 
 export const createDefaultTiles = (rows: number, cols: number) => {
-  const colors = ['#e24334ff', '#0b3f7aff', '#2d7a2dff', '#a724a7ff'];
+  const colorsValueArray = Object.values(colors);
 
   // array di colori base
-  const colorsArray = colors
+  const colorsArray = colorsValueArray
     .map((color) => {
       return Array.from({ length: (rows * cols - 8) / 4 }, () => color);
     })

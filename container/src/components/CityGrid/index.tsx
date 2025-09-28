@@ -12,8 +12,8 @@ export interface CityGridProps {
 export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
   const { defaultTilesTypes, setDefaultTilesTypes } = useCity();
 
-  const rows = 14;
-  const cols = 14;
+  const rows = 12;
+  const cols = rows;
   const items = React.useMemo(() => Array.from({ length: rows * cols }, (_, i) => i), [rows, cols]);
 
   React.useEffect(() => {

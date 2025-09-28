@@ -6,6 +6,7 @@ import { CityProvider } from './context/CityContext';
 import { Typography } from '@mui/material';
 import type { BoardTile } from '../../shared/src/types';
 import MaterialWrapper from '../../shared/src/components/MaterialWrapper';
+import { TeamSection } from './components/TeamSection';
 
 export const App = () => {
   const [tiles, setTiles] = useState<BoardTile[]>([]);
@@ -27,7 +28,9 @@ export const App = () => {
           Microfrontend city builder
         </Typography>
         <Grid container justifyContent="center" alignItems="center" sx={{ height: 'calc(100vh - 52px)', width: '100vw' }} spacing={2}>
-          <Grid size={3.5} />
+          <Grid size={3.5}>
+            <TeamSection />
+          </Grid>
           <Grid size={5}>
             <CityGrid tiles={tiles} />
           </Grid>

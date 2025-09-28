@@ -11,7 +11,7 @@ import { TileNumber } from '../../../../shared/src/components/TileNumber';
 export const DefaultTile: React.FC<{ value: string | null; cellIndex: number }> = ({ value, cellIndex }) => {
   if (value === null || (!isExtraTile(value) && !isPowerPlantTile(value))) {
     return (
-      <div style={{ background: value || 'gray', height: '100%', aspectRatio: '1/1' }}>
+      <div style={{ background: value || 'gray', height: '100%', aspectRatio: '1/1', position: 'relative' }}>
         <TileNumber val={cellIndex}> {cellIndex}</TileNumber>
       </div>
     );
@@ -37,7 +37,16 @@ export const DefaultTile: React.FC<{ value: string | null; cellIndex: number }> 
   };
 
   return (
-    <div style={{ height: '100%', aspectRatio: '1/1', backgroundImage: `url(${getTileImage()})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div
+      style={{
+        height: '100%',
+        aspectRatio: '1/1',
+        backgroundImage: `url(${getTileImage()})`,
+        position: 'relative',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <TileNumber val={cellIndex}> {cellIndex}</TileNumber>
     </div>
   );
