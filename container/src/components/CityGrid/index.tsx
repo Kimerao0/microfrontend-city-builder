@@ -5,6 +5,7 @@ import { DefaultTile } from './defaultTile';
 import safeJsonParse from '../../utils/safeDecode';
 import { useCity } from '../../context/CityContext';
 import type { BoardTile } from '../../../../shared/src/types';
+import { colors } from '../../../../shared/src/values';
 export interface CityGridProps {
   tiles: BoardTile[];
 }
@@ -42,9 +43,19 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
           const col = index % cols;
           const cellIndex = row * cols + col + 1;
           const tileAtIndex = tiles.find((t) => t.id === cellIndex);
+          let isRightColor = false;
+          if (tileAtIndex && defaultTilesTypes) {
+            console.log('tile def col', defaultTilesTypes[cellIndex - 1]);
+            console.log('team col', tileAtIndex.team, colors[tileAtIndex.team]);
+            isRightColor = colors[tileAtIndex.team] === defaultTilesTypes[cellIndex - 1];
+          }
           return (
             <div role="cell" key={index} id={`${cellIndex}`}>
-              {tileAtIndex ? tileAtIndex.tile : <DefaultTile value={defaultTilesTypes ? defaultTilesTypes[index] : null} cellIndex={cellIndex} />}
+              {tileAtIndex && isRightColor ? (
+                tileAtIndex.tile
+              ) : (
+                <DefaultTile value={defaultTilesTypes ? defaultTilesTypes[index] : null} cellIndex={cellIndex} />
+              )}
             </div>
           );
         })}

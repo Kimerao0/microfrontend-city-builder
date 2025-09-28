@@ -23,5 +23,6 @@ export const TileNumber = styled("span")<{ val: number; bgcolor?: string }>(({
     userSelect: "none",
     pointerEvents: "none",
     zIndex: 2,
+    border: "1px solid #ffffff52",
   };
 });

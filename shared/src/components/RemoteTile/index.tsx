@@ -43,7 +43,7 @@ export const RemoteTile: React.FC<RemoteTileProps> = ({
         return CurvaTramImg;
       case "rettilineo-tram-EW":
       case "rettilineo-tram-NS":
-        return RettilineoImg;
+        return RettilineoTramImg;
       default:
         return IncrocioImg;
     }
