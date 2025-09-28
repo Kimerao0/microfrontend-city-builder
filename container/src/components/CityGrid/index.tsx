@@ -1,26 +1,37 @@
 import { Button } from '@mui/material';
 import * as React from 'react';
-import { createDefaultTiles } from './helpers';
+import { createDefaultTiles } from './createDefaultTiles';
 import { DefaultTile } from './defaultTile';
+import safeJsonParse from '../../utils/safeDecode';
+import { useCity } from '../../context/CityContext';
 
-export type TileProps = {
-  row: number; // 0..9
-  col: number; // 0..9
-};
-
-export type CityGridProps = {
-  tiles: React.ComponentType<TileProps>[];
-};
+export type TileProps = { row: number; col: number };
+export type CityGridProps = { tiles: React.ComponentType<TileProps>[] };
 
 export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
-  const [defaultTilesTypes, setDefaultTilesTypes] = React.useState<string[] | null>(null);
-  const rows = 10;
-  const cols = 10;
-  const items = React.useMemo(() => Array.from({ length: rows * cols }, (_, i) => i), []);
+  const { defaultTilesTypes, setDefaultTilesTypes } = useCity();
+
+  const rows = 12;
+  const cols = 12;
+  const items = React.useMemo(() => Array.from({ length: rows * cols }, (_, i) => i), [rows, cols]);
+
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return; // safety per SSR
+    const stored = localStorage.getItem('defaultTiles');
+    const parsed = safeJsonParse<string[] | null>(stored);
+    if (parsed) setDefaultTilesTypes(parsed);
+  }, [setDefaultTilesTypes]);
 
   const handleColorMap = () => {
-    const shuffledColors = createDefaultTiles(rows, cols);
-    setDefaultTilesTypes(shuffledColors);
+    const newTiles = createDefaultTiles(rows, cols); // string[]
+    setDefaultTilesTypes(newTiles);
+    localStorage.setItem('defaultTiles', JSON.stringify(newTiles));
+  };
+
+  const handleMapReset = () => {
+    setDefaultTilesTypes(null);
+    localStorage.setItem('defaultTiles', JSON.stringify(null));
   };
 
   return (
@@ -39,7 +50,7 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
         {items.map((index) => {
           const row = Math.floor(index / cols);
           const col = index % cols;
-          const cellIndex = row * 10 + col + 1;
+          const cellIndex = row * 10 + col + 1; // (nota: qui usi "10" fisso)
 
           const Tile = tiles[index];
 
@@ -48,15 +59,21 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
               {Tile ? (
                 <Tile row={row} col={col} />
               ) : (
-               <DefaultTile value={defaultTilesTypes ? defaultTilesTypes[index] : null} cellIndex={cellIndex}/>
+                <DefaultTile value={defaultTilesTypes ? defaultTilesTypes[index] : null} cellIndex={cellIndex} />
               )}
             </div>
           );
         })}
       </div>
-      <Button variant="contained" color="primary" onClick={handleColorMap} style={{ marginTop: '16px' }}>
-        Color map
-      </Button>
+
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 16 }}>
+        <Button variant="contained" color="primary" onClick={handleColorMap}>
+          Color map
+        </Button>
+        <Button variant="contained" color="primary" onClick={handleMapReset} style={{ marginLeft: 8 }}>
+          Reset map
+        </Button>
+      </div>
     </>
   );
 };
