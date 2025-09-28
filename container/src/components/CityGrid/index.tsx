@@ -1,11 +1,11 @@
 import { Button, styled } from '@mui/material';
 import * as React from 'react';
-import { createDefaultTiles, } from './createDefaultTiles';
+import { createDefaultTiles } from './createDefaultTiles';
 import { DefaultTile } from './defaultTile';
 import safeJsonParse from '../../utils/safeDecode';
 import { useCity } from '../../context/CityContext';
-import type { BoardTile } from '../../../../shared/types';
-export interface CityGridProps { 
+import type { BoardTile } from '../../../../shared/src/types';
+export interface CityGridProps {
   tiles: BoardTile[];
 }
 
@@ -40,18 +40,11 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
         {items.map((index) => {
           const row = Math.floor(index / cols);
           const col = index % cols;
-          const cellIndex = row * cols + col + 1; 
-          const tileAtIndex = tiles.find(t => t.id === cellIndex);
+          const cellIndex = row * cols + col + 1;
+          const tileAtIndex = tiles.find((t) => t.id === cellIndex);
           return (
             <div role="cell" key={index} id={`${cellIndex}`}>
-              {tileAtIndex ? (
-               tileAtIndex.tile
-              ) : (
-                <DefaultTile
-                  value={defaultTilesTypes ? defaultTilesTypes[index] : null}
-                  cellIndex={cellIndex}
-                />
-              )}
+              {tileAtIndex ? tileAtIndex.tile : <DefaultTile value={defaultTilesTypes ? defaultTilesTypes[index] : null} cellIndex={cellIndex} />}
             </div>
           );
         })}

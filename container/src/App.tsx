@@ -3,9 +3,9 @@ import Grid from '@mui/material/Grid';
 import { CityGrid } from './components/CityGrid';
 import { ContractsList } from './components/ContractsList';
 import { CityProvider } from './context/CityContext';
-import { ThemeProvider, CssBaseline, Typography } from '@mui/material';
-import theme from './theme';
-import type { BoardTile } from '../../shared/types';
+import { Typography } from '@mui/material';
+import type { BoardTile } from '../../shared/src/types';
+import MaterialWrapper from '../../shared/src/components/MaterialWrapper';
 
 export const App = () => {
   const [tiles, setTiles] = useState<BoardTile[]>([]);
@@ -20,11 +20,8 @@ export const App = () => {
     })();
   }, []);
 
-  console.log(tiles)
-
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <MaterialWrapper>
       <CityProvider>
         <Typography variant="h3" style={{ marginTop: 20, width: '100%', textAlign: 'center', marginBottom: 0, fontSize: 20, textTransform: 'uppercase' }}>
           Microfrontend city builder
@@ -39,6 +36,6 @@ export const App = () => {
           </Grid>
         </Grid>
       </CityProvider>
-    </ThemeProvider>
+    </MaterialWrapper>
   );
 };

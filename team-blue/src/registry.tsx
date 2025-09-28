@@ -1,12 +1,14 @@
-import Test1 from './components/Test1';
-import type { BoardTile } from '../../shared/types';
+import BasicTile, { type BlueRemoteTileWrapperProps } from './components/BasicTile';
+import type { BoardTile } from '../../shared/src/types';
 
-export const Registry: BoardTile[] = [
-  {
-    id: 55,
-    team: 'blue',
-    tile: <Test1 />,
-  },
-];
+type BlueRegistry = Omit<BlueRemoteTileWrapperProps, 'team'>;
+
+const generateBlueRegistryTile = ({ index, type }: BlueRegistry): BoardTile => ({
+  id: index,
+  team: 'blue',
+  tile: <BasicTile index={index} team="blue" type={type} />,
+});
+
+export const Registry: BoardTile[] = [generateBlueRegistryTile({ index: 5, type: 'curva' })];
 
 export default Registry;

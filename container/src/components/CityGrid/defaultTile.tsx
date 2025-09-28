@@ -6,7 +6,7 @@ import MunicipioImg from '../../assets/places/municipio.jpg';
 import StatuaImg from '../../assets/places/statua.jpg';
 import StazioneImg from '../../assets/places/stazione.jpg';
 import { isExtraTile, isPowerPlantTile } from './createDefaultTiles';
-import styled from '@emotion/styled';
+import { TileNumber } from '../../../../shared/src/components/TileNumber';
 
 export const DefaultTile: React.FC<{ value: string | null; cellIndex: number }> = ({ value, cellIndex }) => {
   if (value === null || (!isExtraTile(value) && !isPowerPlantTile(value))) {
@@ -42,20 +42,3 @@ export const DefaultTile: React.FC<{ value: string | null; cellIndex: number }> 
     </div>
   );
 };
-
-const TileNumber = styled('span')<{ val: number }>(({ val }) => {
-  const smallFs = val > 9 ? 11 : 13;
-  const size = 18;
-  return {
-    borderRadius: '50%',
-    backgroundColor: '#00000075',
-    width: size,
-    height: size,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: val > 99 ? 9 : smallFs,
-    lineHeight: size,
-    color: 'white',
-  };
-});
