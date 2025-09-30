@@ -14,7 +14,7 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
   const [powerStationPosition, setPowerStationPosition] = React.useState<number[]>([]);
   const { defaultTilesTypes, setDefaultTilesTypes } = useCity();
 
-  const rows = 10;
+  const rows = 12;
   const cols = rows;
   const items = React.useMemo(() => Array.from({ length: rows * cols }, (_, i) => i), [rows, cols]);
 
@@ -41,12 +41,13 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
     const powerList = findIndexesOfCentrale(defaultTilesTypes);
     setPowerStationPosition(powerList);
 
-    powerList.forEach((position) =>
+    powerList.forEach((position) => {
+      console.log('Notifying position of power station:', position);
       notifyStationPosition({
         position,
-      }),
-    );
-  }, [defaultTilesTypes]);
+      });
+    });
+  }, [defaultTilesTypes, tiles]);
 
   return (
     <>

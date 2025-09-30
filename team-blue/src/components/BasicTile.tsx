@@ -10,12 +10,14 @@ export interface BlueRemoteTileWrapperProps {
 
 const BasicTile: React.FC<BlueRemoteTileWrapperProps> = ({ index, team, type }) => {
   const [pos, setPos] = useState<StationPosition | null>(null);
+  console.log('BasicTile rendered with props:', { index, team, type });
 
   // ascolto gli eventi di posizione e aggiorno lo stato
   useStationPosition((p) => {
+    console.log('BasicTile received station position:', p);
     setPos(p);
   });
-  console.log(pos);
+  console.log('pos inside BasicTile', pos);
   return <RemoteTile cellIndex={index} team={team} cellType={type} />;
 };
 
