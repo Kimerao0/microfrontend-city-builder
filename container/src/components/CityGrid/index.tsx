@@ -6,11 +6,16 @@ import safeJsonParse from '../../utils/safeDecode';
 import { useCity } from '../../context/CityContext';
 import { EVENT_STATION_POS, type BoardTile, type StationPosition } from '../../../../shared/src/types';
 import { colors } from '../../../../shared/src/values';
+import { getTileCost } from '../../../../shared/src/fn';
+import type { TeamValues } from '../../App';
+
 export interface CityGridProps {
   tiles: BoardTile[];
+  teams: TeamValues;
+  setTeams: React.Dispatch<React.SetStateAction<TeamValues>>;
 }
 
-export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
+export const CityGrid: React.FC<CityGridProps> = ({ tiles, teams, setTeams }) => {
   const [powerStationPosition, setPowerStationPosition] = React.useState<number[]>([]);
   const { defaultTilesTypes, setDefaultTilesTypes } = useCity();
 
@@ -32,15 +37,41 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
   };
 
   const handleMapReset = () => {
+    const confirmReset = window.confirm('⚠️ Sei sicuro di voler resettare la mappa? Questa azione non può essere annullata.');
+
+    if (!confirmReset) return;
+
     setDefaultTilesTypes(null);
     localStorage.setItem('defaultTiles', JSON.stringify(null));
     localStorage.removeItem('mapState');
+    localStorage.removeItem('teams');
   };
   const handleSaveMapState = () => {
     const oldTiles = safeJsonParse<BoardTile[]>(localStorage.getItem('mapState'));
     // differenza fra oltdTiles e tiles
+    let speseBlue = 0;
+    let speseRed = 0;
+    let speseGreen = 0;
+    let spesePurple = 0;
     const newTiles = oldTiles ? tiles.filter((t) => !oldTiles.some((ot) => ot.id === t.id)) : tiles;
-    console.log('newTiles', newTiles);
+    newTiles.forEach((t) => {
+      const tileVal = getTileCost(t.tile.props.type);
+      const tileExtra = t.tile.props.withPowerStation ? 2 : 0;
+      if (t.team === 'blue') speseBlue += tileVal + tileExtra;
+      if (t.team === 'red') speseRed += tileVal + tileExtra;
+      if (t.team === 'green') speseGreen += tileVal + tileExtra;
+      if (t.team === 'purple') spesePurple += tileVal + tileExtra;
+      console.log(`Team ${t.team} ha piazzato ${t.tile.props.type} (costo: ${tileVal} + ${tileExtra})`);
+    });
+    const updatedTeams = {
+      blue: teams['blue'] - speseBlue,
+      red: teams['red'] - speseRed,
+      green: teams['green'] - speseGreen,
+      purple: teams['purple'] - spesePurple,
+    };
+
+    localStorage.setItem('teams', JSON.stringify(updatedTeams));
+    setTeams(updatedTeams);
     localStorage.setItem('mapState', JSON.stringify(tiles));
   };
 
@@ -51,10 +82,7 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
     powerList.forEach((powerIndex) => {
       listOfPoweredCells.push(...getNeighborIndices(powerIndex, Math.sqrt(defaultTilesTypes.length)));
     });
-    // console.log(listOfPoweredCells);
     setPowerStationPosition(powerList);
-
-    // console.log('Notifying position of power station:', position);
     notifyStationPosition({
       positions: listOfPoweredCells,
     });
@@ -96,7 +124,7 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
         <Button variant="outlined" color="primary" onClick={handleMapReset}>
           Reset map
         </Button>
-        <Button variant="outlined" color="primary" onClick={handleSaveMapState}>
+        <Button variant="contained" color="primary" onClick={handleSaveMapState}>
           Save map state
         </Button>
       </div>

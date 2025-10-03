@@ -4,22 +4,17 @@ import { CityGrid } from './components/CityGrid';
 import { ContractsList } from './components/ContractsList';
 import { CityProvider } from './context/CityContext';
 import { Typography } from '@mui/material';
-import type { BoardTile } from '../../shared/src/types';
+import type { BoardTile, Teams } from '../../shared/src/types';
 import MaterialWrapper from '../../shared/src/components/MaterialWrapper';
 import { TeamSection } from './components/TeamSection';
+import safeJsonParse from './utils/safeDecode';
 
-interface TeamValues {
-  name: string;
-  money: number;
-}
+export type TeamValues = Record<Teams, number>;
 
 export const App = () => {
-  const [teams, setTeams] = useState<TeamValues[]>([
-    { name: 'Blue Team', money: 100 },
-    { name: 'Red Team', money: 100 },
-    { name: 'Green Team', money: 100 },
-    { name: 'Purple Team', money: 100 },
-  ]);
+  const storedTeams = localStorage.getItem('teams');
+  const parsedTeams = safeJsonParse<TeamValues | null>(storedTeams);
+  const [teams, setTeams] = useState<TeamValues>(parsedTeams || { blue: 100, red: 100, green: 100, purple: 100 });
   const [tiles, setTiles] = useState<BoardTile[]>([]);
 
   useEffect(() => {
@@ -45,12 +40,12 @@ export const App = () => {
         <Typography variant="h3" style={{ marginTop: 20, width: '100%', textAlign: 'center', marginBottom: 0, fontSize: 20, textTransform: 'uppercase' }}>
           Microfrontend city builder
         </Typography>
-        <Grid container justifyContent="center" alignItems="center" sx={{ height: 'calc(100vh - 52px)', width: '100vw' }} spacing={2}>
+        <Grid container justifyContent="center" alignItems="center" sx={{ height: 'calc(100vh - 52px)', width: '100vw' }} spacing={3}>
           <Grid size={3.5}>
-            <TeamSection />
+            <TeamSection teams={teams} />
           </Grid>
           <Grid size={5}>
-            <CityGrid tiles={tiles} />
+            <CityGrid tiles={tiles} teams={teams} setTeams={setTeams} />
           </Grid>
           <Grid size={3.5} style={{ height: '100%' }}>
             <ContractsList />

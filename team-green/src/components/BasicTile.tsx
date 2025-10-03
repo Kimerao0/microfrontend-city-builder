@@ -6,10 +6,10 @@ export interface GreenRemoteTileWrapperProps {
   index: number;
   team: Teams;
   type: TileType;
+  withPowerStation?: boolean;
 }
 
-const BasicTile: React.FC<GreenRemoteTileWrapperProps> = ({ index, team, type }) => {
-  return <RemoteTile cellIndex={index} team={team} cellType={type} />;
-};
-
+const BasicTile: React.FC<GreenRemoteTileWrapperProps> = ({ index, team, type, withPowerStation }) => (
+  <RemoteTile cellIndex={index} team={team} cellType={type} hasPowerStation={withPowerStation} />
+);
 export default BasicTile;

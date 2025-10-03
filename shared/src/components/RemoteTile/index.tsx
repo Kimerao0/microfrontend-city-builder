@@ -29,6 +29,7 @@ export const RemoteTile: React.FC<RemoteTileProps> = ({
   isPowered,
   hasPowerStation,
 }) => {
+  console.log(cellIndex, cellType, team, isPowered, hasPowerStation);
   const isCellPowered = isPowered || hasPowerStation;
   return (
     <div
@@ -43,7 +44,7 @@ export const RemoteTile: React.FC<RemoteTileProps> = ({
       <div
         style={{
           height: "100%",
-          backgroundImage: `url(${getTileImage(cellType, isPowered || false)})`,
+          backgroundImage: `url(${getTileImage(cellType, isCellPowered || false)})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           transform: getRotation(cellType) || undefined,
