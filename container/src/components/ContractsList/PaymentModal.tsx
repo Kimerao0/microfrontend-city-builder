@@ -52,8 +52,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ paymentVal, setPaymentVal, 
         <TextField sx={{ mt: 2 }} fullWidth label={`Team Green`} value={greenVal} type="number" onChange={handleChangeGreen} variant="outlined" />
         <TextField sx={{ mt: 2 }} fullWidth label={`Team Purple`} value={purpleVal} type="number" onChange={handleChangePurple} variant="outlined" />
         <div style={{ marginTop: 16, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', fontWeight: 'bold' }}>
-          <div>Totale distribuito: {sumVal}</div>
           <div>Totale da distribuire: {paymentVal - sumVal}</div>
+          <div>Totale distribuito: {sumVal}</div>
         </div>
       </DialogContent>
       <DialogActions>
