@@ -1,11 +1,19 @@
-/* team blue   */ // container/src/remotes.d.ts
+/* team blue   */
 declare module 'team_blue/registry' {
-  import type { BoardTile } from './types';
   export const Registry: BoardTile[];
-  export default Registry;
 }
 
 /* team red    */
-/* team purple */
-/* team green  */
+declare module 'team_red/registry' {
+  export const Registry: BoardTile[];
+}
 
+/* team purple */
+declare module 'team_purple/registry' {
+  export const Registry: BoardTile[];
+}
+
+/* team green  */
+declare module 'team_green/registry' {
+  export const Registry: BoardTile[];
+}

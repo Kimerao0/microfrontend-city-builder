@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, styled } from '@mui/material';
 import { createDefaultTiles } from './createDefaultTiles';
-import { DefaultTile, findIndexesOfCentrale } from './defaultTile';
+import { DefaultTile, findIndexesOfCentrale, getNeighborIndices } from './defaultTile';
 import safeJsonParse from '../../utils/safeDecode';
 import { useCity } from '../../context/CityContext';
 import { EVENT_STATION_POS, type BoardTile, type StationPosition } from '../../../../shared/src/types';
@@ -14,7 +14,7 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
   const [powerStationPosition, setPowerStationPosition] = React.useState<number[]>([]);
   const { defaultTilesTypes, setDefaultTilesTypes } = useCity();
 
-  const rows = 12;
+  const rows = 14;
   const cols = rows;
   const items = React.useMemo(() => Array.from({ length: rows * cols }, (_, i) => i), [rows, cols]);
 
@@ -39,13 +39,16 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
   React.useEffect(() => {
     if (!defaultTilesTypes) return;
     const powerList = findIndexesOfCentrale(defaultTilesTypes);
+    const listOfPoweredCells: number[] = [];
+    powerList.forEach((powerIndex) => {
+      listOfPoweredCells.push(...getNeighborIndices(powerIndex, Math.sqrt(defaultTilesTypes.length)));
+    });
+    // console.log(listOfPoweredCells);
     setPowerStationPosition(powerList);
 
-    powerList.forEach((position) => {
-      console.log('Notifying position of power station:', position);
-      notifyStationPosition({
-        position,
-      });
+    // console.log('Notifying position of power station:', position);
+    notifyStationPosition({
+      positions: listOfPoweredCells,
     });
   }, [defaultTilesTypes, tiles]);
 

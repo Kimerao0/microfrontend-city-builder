@@ -4,27 +4,27 @@
     const importMap = {
       
         "@emotion/react": async () => {
-          let pkg = await import("__mf__virtual/container__prebuild___mf_0_emotion_mf_1_react__prebuild__.js")
+          let pkg = await import("__mf__virtual/team_purple__prebuild___mf_0_emotion_mf_1_react__prebuild__.js")
           return pkg
         }
       ,
         "@emotion/styled": async () => {
-          let pkg = await import("__mf__virtual/container__prebuild___mf_0_emotion_mf_1_styled__prebuild__.js")
+          let pkg = await import("__mf__virtual/team_purple__prebuild___mf_0_emotion_mf_1_styled__prebuild__.js")
           return pkg
         }
       ,
         "@mui/material": async () => {
-          let pkg = await import("__mf__virtual/container__prebuild___mf_0_mui_mf_1_material__prebuild__.js")
+          let pkg = await import("__mf__virtual/team_purple__prebuild___mf_0_mui_mf_1_material__prebuild__.js")
           return pkg
         }
       ,
         "react": async () => {
-          let pkg = await import("__mf__virtual/container__prebuild__react__prebuild__.js")
+          let pkg = await import("__mf__virtual/team_purple__prebuild__react__prebuild__.js")
           return pkg
         }
       ,
         "react-dom": async () => {
-          let pkg = await import("__mf__virtual/container__prebuild__react_mf_2_dom__prebuild__.js")
+          let pkg = await import("__mf__virtual/team_purple__prebuild__react_mf_2_dom__prebuild__.js")
           return pkg
         }
       
@@ -36,7 +36,7 @@
             version: "11.14.0",
             scope: ["default"],
             loaded: false,
-            from: "container",
+            from: "team_purple",
             async get () {
               usedShared["@emotion/react"].loaded = true
               const {"@emotion/react": pkgDynamicImport} = importMap 
@@ -62,7 +62,7 @@
             version: "11.14.1",
             scope: ["default"],
             loaded: false,
-            from: "container",
+            from: "team_purple",
             async get () {
               usedShared["@emotion/styled"].loaded = true
               const {"@emotion/styled": pkgDynamicImport} = importMap 
@@ -88,7 +88,7 @@
             version: "7.3.2",
             scope: ["default"],
             loaded: false,
-            from: "container",
+            from: "team_purple",
             async get () {
               usedShared["@mui/material"].loaded = true
               const {"@mui/material": pkgDynamicImport} = importMap 
@@ -114,7 +114,7 @@
             version: "19.1.1",
             scope: ["default"],
             loaded: false,
-            from: "container",
+            from: "team_purple",
             async get () {
               usedShared["react"].loaded = true
               const {"react": pkgDynamicImport} = importMap 
@@ -140,7 +140,7 @@
             version: "19.1.1",
             scope: ["default"],
             loaded: false,
-            from: "container",
+            from: "team_purple",
             async get () {
               usedShared["react-dom"].loaded = true
               const {"react-dom": pkgDynamicImport} = importMap 
@@ -163,38 +163,6 @@
         
     }
       const usedRemotes = [
-                {
-                  entryGlobalName: "team_blue",
-                  name: "team_blue",
-                  type: "module",
-                  entry: "http://localhost:5174/remoteEntry.js",
-                  shareScope: "default",
-                }
-          ,
-                {
-                  entryGlobalName: "team_red",
-                  name: "team_red",
-                  type: "module",
-                  entry: "http://localhost:5177/remoteEntry.js",
-                  shareScope: "default",
-                }
-          ,
-                {
-                  entryGlobalName: "team_green",
-                  name: "team_green",
-                  type: "module",
-                  entry: "http://localhost:5175/remoteEntry.js",
-                  shareScope: "default",
-                }
-          ,
-                {
-                  entryGlobalName: "team_purple",
-                  name: "team_purple",
-                  type: "module",
-                  entry: "http://localhost:5176/remoteEntry.js",
-                  shareScope: "default",
-                }
-          
       ]
       export {
         usedShared,

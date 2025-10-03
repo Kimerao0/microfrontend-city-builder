@@ -28,6 +28,6 @@ export type TileType = (typeof tileTypesList)[number];
 
 // contracts/powerStationPosition.ts
 export type StationPosition = {
-  position: number;
+  positions: number[];
 };
 export const EVENT_STATION_POS = "mf:power:station:position";

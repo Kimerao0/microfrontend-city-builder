@@ -14,9 +14,16 @@ export const App = () => {
   useEffect(() => {
     (async () => {
       // Named export o default, a seconda di come esporti in team-blue
-      const mod = await import('team_blue/registry');
+      const moduleBlue = await import('team_blue/registry');
       // Se in team-blue hai "export const Registry = [...]; export default Registry;"
-      const remoteTiles: BoardTile[] = (mod.default ?? mod.Registry) as BoardTile[];
+      const remoteTiles: BoardTile[] = moduleBlue.Registry as BoardTile[];
+      const moduleRed = await import('team_red/registry');
+      const remoteTilesRed: BoardTile[] = moduleRed.Registry as BoardTile[];
+      const moduleGreen = await import('team_green/registry');
+      const remoteTilesGreen: BoardTile[] = moduleGreen.Registry as BoardTile[];
+      const modulePurple = await import('team_purple/registry');
+      const remoteTilesPurple: BoardTile[] = modulePurple.Registry as BoardTile[];
+      remoteTiles.push(...remoteTilesRed, ...remoteTilesGreen, ...remoteTilesPurple);
       setTiles(remoteTiles);
     })();
   }, []);

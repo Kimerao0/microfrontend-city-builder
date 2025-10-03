@@ -7,7 +7,7 @@ import StatuaImg from '../../assets/places/statua.jpg';
 import StazioneImg from '../../assets/places/stazione.jpg';
 import { isExtraTile, isPowerPlantTile } from './createDefaultTiles';
 import { TileNumber } from '../../../../shared/src/components/TileNumber';
-import { PoweredSpot } from './poweredSpot';
+import { PoweredSpot } from '../../../../shared/src/components/PoweredSpot';
 
 export const DefaultTile: React.FC<{ value: string | null; cellIndex: number; allItems: string[]; powerList: number[] }> = ({
   value,
