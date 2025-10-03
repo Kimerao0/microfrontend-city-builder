@@ -34,6 +34,14 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
   const handleMapReset = () => {
     setDefaultTilesTypes(null);
     localStorage.setItem('defaultTiles', JSON.stringify(null));
+    localStorage.removeItem('mapState');
+  };
+  const handleSaveMapState = () => {
+    const oldTiles = safeJsonParse<BoardTile[]>(localStorage.getItem('mapState'));
+    // differenza fra oltdTiles e tiles
+    const newTiles = oldTiles ? tiles.filter((t) => !oldTiles.some((ot) => ot.id === t.id)) : tiles;
+    console.log('newTiles', newTiles);
+    localStorage.setItem('mapState', JSON.stringify(tiles));
   };
 
   React.useEffect(() => {
@@ -87,6 +95,9 @@ export const CityGrid: React.FC<CityGridProps> = ({ tiles }) => {
         </Button>
         <Button variant="outlined" color="primary" onClick={handleMapReset}>
           Reset map
+        </Button>
+        <Button variant="outlined" color="primary" onClick={handleSaveMapState}>
+          Save map state
         </Button>
       </div>
     </>

@@ -8,7 +8,18 @@ import type { BoardTile } from '../../shared/src/types';
 import MaterialWrapper from '../../shared/src/components/MaterialWrapper';
 import { TeamSection } from './components/TeamSection';
 
+interface TeamValues {
+  name: string;
+  money: number;
+}
+
 export const App = () => {
+  const [teams, setTeams] = useState<TeamValues[]>([
+    { name: 'Blue Team', money: 100 },
+    { name: 'Red Team', money: 100 },
+    { name: 'Green Team', money: 100 },
+    { name: 'Purple Team', money: 100 },
+  ]);
   const [tiles, setTiles] = useState<BoardTile[]>([]);
 
   useEffect(() => {
@@ -16,14 +27,14 @@ export const App = () => {
       // Named export o default, a seconda di come esporti in team-blue
       const moduleBlue = await import('team_blue/registry');
       // Se in team-blue hai "export const Registry = [...]; export default Registry;"
-      const remoteTiles: BoardTile[] = moduleBlue.Registry as BoardTile[];
+      const remoteTilesBlue: BoardTile[] = moduleBlue.Registry as BoardTile[];
       const moduleRed = await import('team_red/registry');
       const remoteTilesRed: BoardTile[] = moduleRed.Registry as BoardTile[];
       const moduleGreen = await import('team_green/registry');
       const remoteTilesGreen: BoardTile[] = moduleGreen.Registry as BoardTile[];
       const modulePurple = await import('team_purple/registry');
       const remoteTilesPurple: BoardTile[] = modulePurple.Registry as BoardTile[];
-      remoteTiles.push(...remoteTilesRed, ...remoteTilesGreen, ...remoteTilesPurple);
+      const remoteTiles = [...remoteTilesBlue, ...remoteTilesRed, ...remoteTilesGreen, ...remoteTilesPurple];
       setTiles(remoteTiles);
     })();
   }, []);

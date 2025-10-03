@@ -9,6 +9,9 @@ const generateGreenRegistryTile = ({ index, type }: GreenRegistry): BoardTile =>
   tile: <BasicTile index={index} team="green" type={type} />,
 });
 
-export const Registry: BoardTile[] = [generateGreenRegistryTile({ index: 80, type: 'rettilineo-EW' })];
+export const Registry: BoardTile[] = [
+  generateGreenRegistryTile({ index: 80, type: 'rettilineo-EW' }),
+  generateGreenRegistryTile({ index: 42, type: 'rettilineo-EW' }),
+];
 
 export default Registry;

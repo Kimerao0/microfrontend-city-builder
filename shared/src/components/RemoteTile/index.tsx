@@ -10,6 +10,8 @@ import PratoImg from "../../assets/prato.jpg";
 import CurvaTramImg from "../../assets/tram-curva.jpg";
 import RettilineoTramImg from "../../assets/tram-rettilineo.jpg";
 import { PoweredSpot } from "../../../../shared/src/components/PoweredSpot";
+import ParcheggioImg from "../../assets/parcheggio.jpg";
+import { PowerStation } from "../../../../shared/src/components/PowerStation";
 
 interface RemoteTileProps {
   cellIndex: number;
@@ -25,7 +27,9 @@ export const RemoteTile: React.FC<RemoteTileProps> = ({
   cellType,
   team,
   isPowered,
+  hasPowerStation,
 }) => {
+  const isCellPowered = isPowered || hasPowerStation;
   return (
     <div
       style={{
@@ -45,7 +49,8 @@ export const RemoteTile: React.FC<RemoteTileProps> = ({
           transform: getRotation(cellType) || undefined,
         }}
       />
-      {isPowered && <PoweredSpot />}
+      {isCellPowered && <PoweredSpot />}
+      {hasPowerStation && <PowerStation />}
     </div>
   );
 };
@@ -72,6 +77,8 @@ const getTileImage = (type: TileType, isPowered: boolean) => {
     case "rettilineo-tram-EW":
     case "rettilineo-tram-NS":
       return isPowered ? RettilineoTramImg : RettilineoImg;
+    case "parcheggio":
+      return ParcheggioImg;
     default:
       return IncrocioImg;
   }

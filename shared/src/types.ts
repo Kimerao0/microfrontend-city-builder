@@ -20,11 +20,33 @@ export const tileTypesList = [
   "curva-tram-SW",
   "rettilineo-tram-NS",
   "rettilineo-tram-EW",
-  "giardino",
   "prato",
+  "giardino",
+  "parcheggio",
 ] as const;
 
 export type TileType = (typeof tileTypesList)[number];
+
+export const specialTyleList = [
+  "stazione",
+  "stadio",
+  "municipio",
+  "statua",
+  "ospedale",
+  "centrale",
+] as const;
+
+export type SpecialTileType = (typeof specialTyleList)[number];
+
+export const poweredNeededTileList: TileType[] = [
+  "curva-tram-NE",
+  "curva-tram-NW",
+  "curva-tram-SE",
+  "curva-tram-SW",
+  "rettilineo-tram-NS",
+  "rettilineo-tram-EW",
+  "giardino",
+];
 
 // contracts/powerStationPosition.ts
 export type StationPosition = {
