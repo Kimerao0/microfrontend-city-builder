@@ -1,11 +1,13 @@
 import { Button, styled } from '@mui/material';
 import React, { useState } from 'react';
 import { useCity } from '../../context/CityContext';
-import type { SpecialTileType } from '../../../../shared/src/types';
+import { type SpecialTileType } from '../../../../shared/src/types';
 import { shuffle } from '../../utils/arrayMethods';
 import { basicContractsList } from './basics';
 import { minGridDistance, randomBetween } from '../../../../shared/src/fn';
 import safeJsonParse from '../../utils/safeDecode';
+import PaymentModal from './PaymentModal';
+import type { TeamValues } from '../../App';
 
 export interface BasicContractType {
   title: string;
@@ -20,10 +22,12 @@ interface ContractType extends BasicContractType {
   rewardAdvanced?: number;
 }
 
-export const ContractsList: React.FC = () => {
+export const ContractsList: React.FC<{ teams: TeamValues; setTeams: React.Dispatch<React.SetStateAction<TeamValues>> }> = ({ teams, setTeams }) => {
   const storedContracts = localStorage.getItem('contracts');
   const parsedContracts = safeJsonParse<ContractType[] | null>(storedContracts);
   const [contracts, setContracts] = useState<ContractType[]>(parsedContracts || []);
+  const [paymentVal, setPaymentVal] = useState<number>(0);
+
   const { hasTiles, defaultTilesTypes } = useCity();
 
   const handleContractsCreation = () => {
@@ -75,16 +79,28 @@ export const ContractsList: React.FC = () => {
         <div key={index} style={{ border: '1px solid gray', borderRadius: 8, padding: 8, width: '100%', backgroundColor: '#ffffd6' }}>
           <h3 style={{ margin: '4px 0' }}>{contract.title}</h3>
           <p style={{ margin: '4px 0' }}>{contract.description}</p>
-          <p style={{ margin: '4px 0' }}>
-            {contract.rewardAdvanced ? `Ricompensa collegamento con strada: ` : `Ricompensa: `} <strong>{Math.floor(contract.rewardSimple)} $</strong>
-          </p>
-          {contract.rewardAdvanced && (
-            <p style={{ margin: '4px 0' }}>
-              Ricompensa collegamento con tram: <strong>{Math.floor(contract.rewardAdvanced)} $</strong>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <p style={{ margin: '0' }}>
+              {contract.rewardAdvanced ? `Ricompensa collegamento con strada: ` : `Ricompensa: `} <strong>{Math.floor(contract.rewardSimple)} $</strong>
             </p>
+            <Button variant="text" sx={{ p: '2px', ml: '5px' }} onClick={() => setPaymentVal(Math.floor(contract.rewardSimple))}>
+              Pay
+            </Button>
+          </div>
+
+          {contract.rewardAdvanced && (
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <p style={{ margin: '4px 0' }}>
+                Ricompensa collegamento con tram: <strong>{Math.floor(contract.rewardAdvanced)} $</strong>
+              </p>
+              <Button variant="text" sx={{ p: '2px', ml: '5px' }} onClick={() => setPaymentVal(Math.floor(contract.rewardAdvanced!))}>
+                Pay extra
+              </Button>
+            </div>
           )}
         </div>
       ))}
+      <PaymentModal paymentVal={paymentVal} setPaymentVal={setPaymentVal} teams={teams} setTeams={setTeams} />
     </ContractsListWrapper>
   );
 };

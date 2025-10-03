@@ -48,7 +48,7 @@ export const App = () => {
             <CityGrid tiles={tiles} teams={teams} setTeams={setTeams} />
           </Grid>
           <Grid size={3.5} style={{ height: '100%' }}>
-            <ContractsList />
+            <ContractsList teams={teams} setTeams={setTeams} />
           </Grid>
         </Grid>
       </CityProvider>
